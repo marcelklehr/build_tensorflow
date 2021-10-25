@@ -1,0 +1,29 @@
+name: Build tensorflow
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  release:
+    types: [published, created]
+
+jobs:
+  build-tensorflow:
+    runs-on: ubuntu-latest
+
+    name: Build tensorflow
+
+    container:
+      image: ghcr.io/kaufman-lab/tensorflow_buildenvironment:v1
+
+    steps:
+      - name: Install bookmarks app
+        shell: bash
+        run: |
+          ./run_all_builds.sh
+
+      - name: Upload files
+        uses: actions/upload-artifact@v2
+        with:
+          path: builds/*/
