@@ -18,12 +18,19 @@ jobs:
       image: tensorflow/tensorflow:devel
 
     steps:
-      - name: Install bookmarks app
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: git-tree
+
+      - name: Run all builds
         shell: bash
         run: |
+          cd git-tree
           ./run_all_builds.sh
 
       - name: Upload files
         uses: actions/upload-artifact@v2
         with:
-          path: builds/*/
+          path: git-tree/builds/*/
