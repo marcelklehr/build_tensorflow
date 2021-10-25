@@ -15,7 +15,7 @@ jobs:
     name: Build tensorflow
 
     container:
-      image: ghcr.io/kaufman-lab/tensorflow_buildenvironment:v1
+      image: tensorflow/tensorflow:devel
 
     steps:
       - name: Install bookmarks app
