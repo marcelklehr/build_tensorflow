@@ -51,7 +51,7 @@ git checkout tags/$tensorflowversion
 
 
 ## build and make wheel
-bazel --output_base $bazel_output_base build --config=mkl \
+bazel --output_base $bazel_output_base build --config=opt \
  --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" --copt="-march=${march}" \
  --copt="-mtune=${mtune}" --copt="-O3" \
-  //tensorflow/tools/pip_package:build_pip_package && bazel-bin/tensorflow/tools/pip_package/build_pip_package ../
+  //tensorflow:libtensorflow.so
