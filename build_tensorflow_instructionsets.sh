@@ -58,26 +58,26 @@ git checkout tags/$tensorflowversion
  #https://software.intel.com/content/www/us/en/develop/articles/intel-optimization-for-tensorflow-installation-guide.html
  
 if [ "$opt" = "mkl_only" ]; then     
-    bazel --output_base $bazel_output_base build --config=mkl --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt --copt=-mavx --copt=-mno-avx2 --copt=-mno-fma --copt=-mno-avx512f   \
-    //tensorflow/tools/pip_package:build_pip_package && bazel-bin/tensorflow/tools/pip_package/build_pip_package ../
+    bazel --output_base $bazel_output_base build --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt --copt=-mavx --copt=-mno-avx2 --copt=-mno-fma --copt=-mno-avx512f   \
+    //tensorflow:libtensorflow.so
 elif [ "$opt" = "nothing" ]; then
     bazel --output_base $bazel_output_base build --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt --copt=-mavx --copt=-mno-avx2 --copt=-mno-fma --copt=-mno-avx512f  \
-    //tensorflow/tools/pip_package:build_pip_package && bazel-bin/tensorflow/tools/pip_package/build_pip_package ../
+    //tensorflow:libtensorflow.so
 elif [ "$opt" = "O3_only" ]; then
     bazel --output_base $bazel_output_base build --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt --copt=-mavx --copt=-mno-avx2 --copt=-mno-fma --copt=-mno-avx512f --copt="-O3" \
-    //tensorflow/tools/pip_package:build_pip_package && bazel-bin/tensorflow/tools/pip_package/build_pip_package ../
+    //tensorflow:libtensorflow.so
 elif [ "$opt" = "AVX2_only" ]; then
     bazel --output_base $bazel_output_base build --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt --copt=-mavx --copt=-mavx2 --copt=-mfma --copt=-mno-avx512f  \
-    //tensorflow/tools/pip_package:build_pip_package && bazel-bin/tensorflow/tools/pip_package/build_pip_package ../  
+    //tensorflow:libtensorflow.so  
 elif [ "$opt" = "mkl_AVX2_only" ]; then
     bazel --output_base $bazel_output_base build --config=mkl --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt --copt=-mavx --copt=-mavx2 --copt=-mfma --copt=-mno-avx512f  \
-    //tensorflow/tools/pip_package:build_pip_package && bazel-bin/tensorflow/tools/pip_package/build_pip_package ../ 
+    //tensorflow:libtensorflow.so
 elif [ "$opt" = "mkl_O3_only" ]; then
     bazel --output_base $bazel_output_base build --config=mkl --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt --copt=-mavx --copt=-mno-avx2 --copt=-mno-fma --copt=-mno-avx512f --copt="-O3" \
-    //tensorflow/tools/pip_package:build_pip_package && bazel-bin/tensorflow/tools/pip_package/build_pip_package ../ 
+    //tensorflow:libtensorflow.so
 elif [ "$opt" = "nothingOs" ]; then
     bazel --output_base $bazel_output_base build --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" --copt=-mavx --copt=-DNDEBUG --copt=-mavx --copt=-mno-avx2 --copt=-mno-fma --copt=-mno-avx512f --copt="-Os"  \
-    //tensorflow/tools/pip_package:build_pip_package && bazel-bin/tensorflow/tools/pip_package/build_pip_package ../
+    //tensorflow:libtensorflow.so
 else
   exit 1
 fi
