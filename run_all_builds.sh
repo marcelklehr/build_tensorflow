@@ -1,7 +1,9 @@
 #!/bin/bash
 
 export tensorflowversion=v2.5.0 #must be a valid tag
+export bazel_output_base="$(pwd)/bazel"
 
+mkdir -p $bazel_output_base
 
 export opt='mkl_only'
 ./build_tensorflow_instructionsets.sh

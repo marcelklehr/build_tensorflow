@@ -33,4 +33,4 @@ jobs:
       - name: Upload files
         uses: actions/upload-artifact@v2
         with:
-          path: git-tree/builds/*/
+          path: git-tree/bazel/*/
