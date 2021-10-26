@@ -45,7 +45,7 @@ cd builds
 mkdir tensorflow$march$mtune
 cd tensorflow$march$mtune
 
-git clone https://github.com/tensorflow/tensorflow --depth 1 --branch tags/$tensorflowversion tensorflow
+git clone https://github.com/tensorflow/tensorflow --depth 1 --branch $tensorflowversion tensorflow
 cd tensorflow
 
 

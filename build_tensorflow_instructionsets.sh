@@ -44,7 +44,7 @@ cd builds
 mkdir tensorflow$opt
 cd tensorflow$opt
 
-git clone https://github.com/tensorflow/tensorflow --depth 1 --branch tags/$tensorflowversion tensorflow
+git clone https://github.com/tensorflow/tensorflow --depth 1 --branch $tensorflowversion tensorflow
 cd tensorflow
 
 
