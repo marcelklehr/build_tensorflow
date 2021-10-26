@@ -12,7 +12,19 @@ jobs:
   build-tensorflow:
     runs-on: ubuntu-latest
 
-    name: Build tensorflow
+    name: Build tensorflow-v2.5.0-${{ matrix.opt }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        opt:
+          - mkl_only
+          - nothing
+          - O3_only
+          - AVX2_only
+          - mkl_AVX2_only
+          - mkl_O3_only
+          - nothingOs
 
     container:
       image: tensorflow/tensorflow:devel
@@ -22,15 +34,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          path: git-tree
+          path: repo
 
       - name: Run all builds
         shell: bash
+        env:
+          opt: ${{ matrix.opt }}
+          tensorflowversion: v2.5.0
         run: |
-          cd git-tree
-          ./run_all_builds.sh
+          export bazel_output_base="$(pwd)/bazel"
+          mkdir -p $bazel_output_base
+          export BINDIR="$(pwd)/out"
+          mkdir -p $BINDIR
+          cd repo
+          ./build_tensorflow_instructionsets.sh
 
       - name: Upload files
         uses: actions/upload-artifact@v2
         with:
-          path: git-tree/bazel/*/
+          path: out/*
+          name: libtensorflow-v2.5.0-${{matrix.opt}}
