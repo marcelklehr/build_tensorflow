@@ -45,10 +45,16 @@ jobs:
           export bazel_output_base="$(pwd)/bazel"
           mkdir -p $bazel_output_base
           cd repo
-          ./build_tensorflow_instructionsets.sh
+          ./build_tensorflow_instructionsets.sh 
+
+      - name: Zip result
+        shell: bash
+        run: |
+          ls bazel
+          tar -cf build.tar bazel
 
       - name: Upload files
         uses: actions/upload-artifact@v2
         with:
-          path: bazel/
+          path: build.tar
           name: libtensorflow-v2.5.0-${{matrix.opt}}
