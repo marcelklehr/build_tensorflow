@@ -44,13 +44,11 @@ jobs:
         run: |
           export bazel_output_base="$(pwd)/bazel"
           mkdir -p $bazel_output_base
-          export BINDIR="$(pwd)/out"
-          mkdir -p $BINDIR
           cd repo
           ./build_tensorflow_instructionsets.sh
 
       - name: Upload files
         uses: actions/upload-artifact@v2
         with:
-          path: out/*
+          path: bazel/
           name: libtensorflow-v2.5.0-${{matrix.opt}}
