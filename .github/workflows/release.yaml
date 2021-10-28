@@ -36,7 +36,7 @@ jobs:
         with:
           path: repo
 
-      - name: Run all builds
+      - name: Run build
         shell: bash
         env:
           opt: ${{ matrix.opt }}
@@ -47,14 +47,8 @@ jobs:
           cd repo
           ./build_tensorflow_instructionsets.sh 
 
-      - name: Zip result
-        shell: bash
-        run: |
-          ls bazel
-          tar -cf build.tar bazel
-
       - name: Upload files
         uses: actions/upload-artifact@v2
         with:
-          path: build.tar
+          path: bazel/execroot/org_tensorflow/bazel-out/k8-opt/bin/tensorflow/libtensorflow*
           name: libtensorflow-v2.5.0-${{matrix.opt}}
