@@ -25,6 +25,7 @@ jobs:
           - mkl_AVX2_only
           - mkl_O3_only
           - nothingOs
+          - nothing_noAVX
 
     container:
       image: tensorflow/tensorflow:devel

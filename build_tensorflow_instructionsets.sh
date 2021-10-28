@@ -62,6 +62,9 @@ if [ "$opt" = "mkl_only" ]; then
 elif [ "$opt" = "nothing" ]; then
     bazel --output_base $bazel_output_base build --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt --copt=-mavx --copt=-mno-avx2 --copt=-mno-fma --copt=-mno-avx512f  \
     //tensorflow:libtensorflow.so
+elif [ "$opt" = "nothing_noAVX" ]; then
+    bazel --output_base $bazel_output_base build --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt --copt=-mno-avx --copt=-mno-avx2 --copt=-mno-fma --copt=-mno-avx512f  \
+    //tensorflow:libtensorflow.so
 elif [ "$opt" = "O3_only" ]; then
     bazel --output_base $bazel_output_base build --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt --copt=-mavx --copt=-mno-avx2 --copt=-mno-fma --copt=-mno-avx512f --copt="-O3" \
     //tensorflow:libtensorflow.so
