@@ -1,4 +1,4 @@
-name: Build tensorflow
+name: Build tensorflow for specific architectures
 
 on:
   pull_request:
@@ -12,20 +12,20 @@ jobs:
   build-tensorflow:
     runs-on: ubuntu-latest
 
-    name: Build tensorflow-v2.5.0-${{ matrix.opt }}
+    name: Build tensorflow-v2.5.0-${{ matrix.arch }}
 
     strategy:
       fail-fast: false
       matrix:
-        opt:
-          - mkl_only
-          - nothing
-          - O3_only
-          - AVX2_only
-          - mkl_AVX2_only
-          - mkl_O3_only
-          - nothingOs
-          - nothing_noAVX
+        arch:
+          - nehalem
+          - silvermont
+          - skylake
+          - skylake-avx512
+          - broadwell
+          - westmere
+          - haswell
+          - bonnell
 
     container:
       image: tensorflow/tensorflow:devel
@@ -40,13 +40,14 @@ jobs:
       - name: Run build
         shell: bash
         env:
-          opt: ${{ matrix.opt }}
+          march: ${{ matrix.arch }}
+          mtune: ${{ matrix.arch }}
           tensorflowversion: v2.5.0
         run: |
           export bazel_output_base="$(pwd)/bazel"
           mkdir -p $bazel_output_base
           cd repo
-          ./build_tensorflow_instructionsets.sh 
+          ./build_tensorflow_architecture.sh 
 
       - name: Upload files
         uses: actions/upload-artifact@v2

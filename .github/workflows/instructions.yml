@@ -1,0 +1,55 @@
+name: Build tensorflow for specific instructions
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  release:
+    types: [published, created]
+
+jobs:
+  build-tensorflow:
+    runs-on: ubuntu-latest
+
+    name: Build tensorflow-v2.5.0-${{ matrix.opt }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        opt:
+          - mkl_only
+          - nothing
+          - O3_only
+          - AVX2_only
+          - mkl_AVX2_only
+          - mkl_O3_only
+          - nothingOs
+          - nothing_noAVX
+
+    container:
+      image: tensorflow/tensorflow:devel
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: repo
+
+      - name: Run build
+        shell: bash
+        env:
+          opt: ${{ matrix.opt }}
+          tensorflowversion: v2.5.0
+        run: |
+          export bazel_output_base="$(pwd)/bazel"
+          mkdir -p $bazel_output_base
+          cd repo
+          ./build_tensorflow_instructionsets.sh 
+
+      - name: Upload files
+        uses: actions/upload-artifact@v2
+        with:
+          path: bazel/execroot/org_tensorflow/bazel-out/k8-opt/bin/tensorflow/libtensorflow*
+          name: libtensorflow-v2.5.0-${{matrix.opt}}
