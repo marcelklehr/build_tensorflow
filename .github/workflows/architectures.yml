@@ -53,4 +53,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           path: bazel/execroot/org_tensorflow/bazel-out/k8-opt/bin/tensorflow/libtensorflow*
-          name: libtensorflow-v2.5.0-${{matrix.opt}}
+          name: libtensorflow-v2.5.0-${{matrix.arch}}
