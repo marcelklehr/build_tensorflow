@@ -50,7 +50,7 @@ cd tensorflow
 
 
 ## build and make wheel
-bazel --output_base $bazel_output_base build --config=opt \
+bazel --output_base $bazel_output_base build -c opt \
  --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" --copt="-march=${march}" \
  --copt="-mtune=${mtune}" --copt="-O3" \
   //tensorflow:libtensorflow.so
