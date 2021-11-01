@@ -12,11 +12,13 @@ jobs:
   build-tensorflow:
     runs-on: ubuntu-latest
 
-    name: Build tensorflow-v2.5.0-${{ matrix.opt }}
+    name: Build tensorflow-${{matrix.version}}-${{ matrix.opt }}
 
     strategy:
       fail-fast: false
       matrix:
+        version:
+          - v2.5.0
         opt:
           - mkl_only
           - nothing
@@ -37,24 +39,29 @@ jobs:
         with:
           path: repo
 
+      - name: Install jq tool
+        run: |
+          sudo apt-get update
+          sudo apt-get install jq
+
       - name: Run build
         shell: bash
         env:
           opt: ${{ matrix.opt }}
-          tensorflowversion: v2.5.0
+          tensorflowversion: ${{ matrix.version }}
         run: |
           export bazel_output_base="$(pwd)/bazel"
           mkdir -p $bazel_output_base
           cd repo
           ./build_tensorflow_instructionsets.sh 
       
-      - name: Run build
+      - name: Zip build
         shell: bash
         run: |
           tar -czf libtensorflow.tar.gz bazel/execroot/org_tensorflow/bazel-out/k8-opt/bin/tensorflow/libtensorflow*
 
       - run:   |
-               upload_url=$(curl -sL https://api.github.com/repos/marcelklehr/build_tensorflow/releases/latest | jq -r '.upload_url')
+               upload_url=$(curl -sL https://api.github.com/repos/marcelklehr/build_tensorflow/releases | jq '. | map(select(.tag_name == "${{matrix.version}}")) [0].upload_url')
                echo UPLOAD_URL=$upload_url >> $GITHUB_ENV
         shell: bash
 
@@ -65,5 +72,5 @@ jobs:
         with:
           upload_url: ${{ env.UPLOAD_URL }}
           asset_path: ./libtensorflow.tar.gz
-          asset_name: libtensorflow-v2.5.0-${{matrix.opt}}.tar.gz
+          asset_name: libtensorflow-${{matrix.version}}-${{matrix.opt}}.tar.gz
           asset_content_type: application/gzip
