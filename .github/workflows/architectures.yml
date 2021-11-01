@@ -17,6 +17,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        version:
+          - v2.5.0
         arch:
           - nehalem
           - silvermont
