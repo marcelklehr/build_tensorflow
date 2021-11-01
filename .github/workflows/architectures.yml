@@ -47,10 +47,24 @@ jobs:
           export bazel_output_base="$(pwd)/bazel"
           mkdir -p $bazel_output_base
           cd repo
-          ./build_tensorflow_architecture.sh 
+          ./build_tensorflow_architecture.sh
 
-      - name: Upload files
-        uses: actions/upload-artifact@v2
+      - name: Run build
+        shell: bash
+        run: |
+          tar -czf libtensorflow.tar.gz bazel/execroot/org_tensorflow/bazel-out/k8-opt/bin/tensorflow/libtensorflow*
+
+      - run:   |
+               upload_url=$(curl -sL https://api.github.com/repos/marcelklehr/build_tensorflow/releases/latest | jq -r '.upload_url')
+               echo UPLOAD_URL=$upload_url >> $GITHUB_ENV
+        shell: bash
+
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         with:
-          path: bazel/execroot/org_tensorflow/bazel-out/k8-opt/bin/tensorflow/libtensorflow*
-          name: libtensorflow-v2.5.0-${{matrix.arch}}
+          upload_url: ${{ env.UPLOAD_URL }}
+          asset_path: ./libtensorflow.tar.gz
+          asset_name: libtensorflow-v2.5.0-${{matrix.arch}}.tar.gz
+          asset_content_type: application/gzip
