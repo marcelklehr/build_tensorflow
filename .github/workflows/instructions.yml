@@ -61,7 +61,7 @@ jobs:
           tar -czf libtensorflow.tar.gz bazel/execroot/org_tensorflow/bazel-out/k8-opt/bin/tensorflow/libtensorflow*
 
       - run:   |
-               upload_url=$(curl -sL https://api.github.com/repos/marcelklehr/build_tensorflow/releases | jq '. | map(select(.tag_name == "${{matrix.version}}")) [0].upload_url')
+               upload_url=$(curl -sL https://api.github.com/repos/marcelklehr/build_tensorflow/releases | jq '. | map(select(.tag_name == "${{matrix.version}}")) [0].upload_url [:-13]')
                echo UPLOAD_URL=$upload_url >> $GITHUB_ENV
         shell: bash
 
